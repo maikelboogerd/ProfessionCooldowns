@@ -42,9 +42,9 @@ function printCooldowns()
     for characterName, CooldownInfo in pairs(ProfessionCooldowns) do
         for cooldownName, cooldownState in pairs(CooldownInfo) do
             if currentTime > cooldownState.readyAt then
-                print("+", characterName, cooldownName, "ready")
+                print("|cff00FF00 + " .. characterName .. " " .. cooldownName .. " is ready|r")
             else
-                print("-", characterName, cooldownName, "on cooldown")
+                print("|cffFF0000 - " .. characterName .. " " .. cooldownName .. " on cooldown|r")
             end
         end
     end
