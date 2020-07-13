@@ -1,0 +1,11 @@
+## Interface: 11305
+
+## Title: ProfessionCooldowns
+## Notes: Track Transmute & Salt Shaker cooldowns
+
+## Version: 0.0.1
+## Author: Maik
+## SavedVariables: ProfessionCooldowns
+## DefaultState: enabled
+
+ProfessionCooldowns.lua
