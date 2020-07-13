@@ -9,7 +9,7 @@ function updateCooldowns()
 
     local playerName = UnitName("player")
 
-    ProfessionCooldowns[playerName] = {}
+    ProfessionCooldownsDB[playerName] = {}
 
     for i = 1, GetNumSkillLines() do
         local skillName, _, _, skillRank = GetSkillLineInfo(i)
@@ -17,7 +17,7 @@ function updateCooldowns()
         if skillName == "Alchemy" and skillRank >= 275 then
             -- Arcanite
             local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
-            ProfessionCooldowns[playerName].arcanite = {
+            ProfessionCooldownsDB[playerName].arcanite = {
                 cooldownStart = start,
                 cooldownDuration = duration,
                 readyAt = start + duration,
@@ -27,7 +27,7 @@ function updateCooldowns()
         if skillName == "Tailoring" and skillRank >= 250 then
             -- Mooncloth
             local start, duration, enabled = GetSpellCooldown(MOONCLOTH_SPELL_ID)
-            ProfessionCooldowns[playerName].mooncloth = {
+            ProfessionCooldownsDB[playerName].mooncloth = {
                 cooldownStart = start,
                 cooldownDuration = duration,
                 readyAt = start + duration,
@@ -39,7 +39,7 @@ end
 
 function printCooldowns()
     local currentTime = GetTime()
-    for characterName, CooldownInfo in pairs(ProfessionCooldowns) do
+    for characterName, CooldownInfo in pairs(ProfessionCooldownsDB) do
         for cooldownName, cooldownState in pairs(CooldownInfo) do
             if currentTime > cooldownState.readyAt then
                 print("|cff00FF00 + " .. characterName .. " " .. cooldownName .. " is ready|r")
@@ -52,8 +52,8 @@ end
 
 function events:ADDON_LOADED(...)
     local playerName = UnitName("player")
-    if ProfessionCooldowns == nil then ProfessionCooldowns = {} end
-    ProfessionCooldowns[playerName] = {}
+    if ProfessionCooldownsDB == nil then ProfessionCooldownsDB = {} end
+    ProfessionCooldownsDB[playerName] = {}
 end
 
 function events:PLAYER_LOGIN(...)
