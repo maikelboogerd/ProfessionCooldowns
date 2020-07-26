@@ -11,6 +11,14 @@ function updateCooldowns()
 
     ProfessionCooldownsDB[playerName] = {}
 
+    -- -- Arcanite
+    -- local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
+    -- ProfessionCooldownsDB[playerName].Arcanite = {
+    --     cooldownStart = start,
+    --     cooldownDuration = duration,
+    --     readyAt = start + duration,
+    -- }
+
     for i = 1, GetNumSkillLines() do
         local skillName, _, _, skillRank = GetSkillLineInfo(i)
 
@@ -50,7 +58,9 @@ end
 
 function printCooldowns()
     local currentTime = GetTime()
+    print("ProfessionCooldowns:")
     for characterName, CooldownInfo in pairs(ProfessionCooldownsDB) do
+        print(characterName)
         for cooldownName, cooldownState in pairs(CooldownInfo) do
             if currentTime > cooldownState.readyAt then
                 print("|cff00FF00 + " .. characterName .. " " .. cooldownName .. " is ready|r")
@@ -73,10 +83,6 @@ function events:PLAYER_LOGIN(...)
     printCooldowns()
 end
 
-function events:PLAYER_LOGOUT(...)
-    updateCooldowns()
-end
-
 frame:SetScript("OnEvent", function(self, event, ...)
     events[event](self, ...)
 end);
@@ -87,5 +93,6 @@ end
 
 SLASH_COOLDOWNS1 = "/cd"
 function SlashCmdList.COOLDOWNS(msg, editbox)
+    updateCooldowns()
     printCooldowns()
 end
