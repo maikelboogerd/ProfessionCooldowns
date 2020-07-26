@@ -1,7 +1,7 @@
-local frame, events = CreateFrame("FRAME", "ProfessionCooldownEvents"), {};
+local frame, events = CreateFrame("FRAME"), {};
 
 local ARCANITE_SPELL_ID = 17187
-local MOONCLOTH_SPELL_ID = 18563 -- 18560
+local MOONCLOTH_SPELL_ID = 18560 -- 18563
 local SALT_SHAKER_ID = 15846
 local HEARTHSTONE_ID = 6948
 
@@ -17,7 +17,7 @@ function updateCooldowns()
         if skillName == "Alchemy" and skillRank >= 275 then
             -- Arcanite
             local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
-            ProfessionCooldownsDB[playerName].arcanite = {
+            ProfessionCooldownsDB[playerName].Arcanite = {
                 cooldownStart = start,
                 cooldownDuration = duration,
                 readyAt = start + duration,
@@ -27,12 +27,23 @@ function updateCooldowns()
         if skillName == "Tailoring" and skillRank >= 250 then
             -- Mooncloth
             local start, duration, enabled = GetSpellCooldown(MOONCLOTH_SPELL_ID)
-            ProfessionCooldownsDB[playerName].mooncloth = {
+            ProfessionCooldownsDB[playerName].Mooncloth = {
                 cooldownStart = start,
                 cooldownDuration = duration,
                 readyAt = start + duration,
             }
         end
+
+        if skillName == "Leatherworking" and skillRank >= 250 then
+            -- Salt Shaker
+            local start, duration, enabled = GetItemCooldown(SALT_SHAKER_ID)
+            ProfessionCooldownsDB[playerName].SaltShaker = {
+                cooldownStart = start,
+                cooldownDuration = duration,
+                readyAt = start + duration,
+            }
+        end
+
     end
 
 end
@@ -50,10 +61,11 @@ function printCooldowns()
     end
 end
 
-function events:ADDON_LOADED(...)
-    local playerName = UnitName("player")
-    if ProfessionCooldownsDB == nil then ProfessionCooldownsDB = {} end
-    ProfessionCooldownsDB[playerName] = {}
+function events:ADDON_LOADED(addonName)
+    if addonName == "ProfessionCooldowns" then
+        if ProfessionCooldownsDB == nil then ProfessionCooldownsDB = {} end
+        if ProfessionCooldownsDB[playerName] == nil then ProfessionCooldownsDB[playerName] = {} end
+    end
 end
 
 function events:PLAYER_LOGIN(...)

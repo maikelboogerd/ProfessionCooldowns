@@ -1,9 +1,9 @@
 ## Interface: 11305
 
 ## Title: ProfessionCooldowns
-## Notes: Track Transmute & Salt Shaker cooldowns
+## Notes: Track Arcanite, Mooncloth and Salt Shaker cooldowns
 
-## Version: 0.0.1
+## Version: 0.0.2
 ## Author: Maik
 ## SavedVariables: ProfessionCooldownsDB
 ## DefaultState: enabled
