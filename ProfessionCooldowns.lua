@@ -73,6 +73,7 @@ end
 
 function events:ADDON_LOADED(addonName)
     if addonName == "ProfessionCooldowns" then
+        local playerName = UnitName("player")
         if ProfessionCooldownsDB == nil then ProfessionCooldownsDB = {} end
         if ProfessionCooldownsDB[playerName] == nil then ProfessionCooldownsDB[playerName] = {} end
     end
