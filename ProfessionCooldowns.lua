@@ -1,7 +1,7 @@
 local frame, events = CreateFrame("FRAME"), {};
 
 local ARCANITE_SPELL_ID = 17187
-local WATER_TO_AIR = 17562
+local WATER_TO_AIR_ID = 17562
 local MOONCLOTH_SPELL_ID = 18560 -- 18563
 local SALT_SHAKER_ID = 15846
 local HEARTHSTONE_ID = 6948
@@ -47,7 +47,7 @@ function updateCooldowns()
                 readyAt = start + duration,
             }
             -- Water to Air
-            local start, duration, enabled = GetSpellCooldown(WATER_TO_AIR)
+            local start, duration, enabled = GetSpellCooldown(WATER_TO_AIR_ID)
             ProfessionCooldownsDB[playerName].WaterToAir = {
                 cooldownStart = start,
                 cooldownDuration = duration,
