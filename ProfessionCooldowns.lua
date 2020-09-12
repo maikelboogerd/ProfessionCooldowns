@@ -84,10 +84,10 @@ function printCooldowns()
     for characterName, CooldownInfo in pairs(ProfessionCooldownsDB) do
         for cooldownName, cooldownState in pairs(CooldownInfo) do
             if currentTime > cooldownState.readyAt then
-                print("|cffFFFF00[Cooldowns]|r <" .. characterName .. "> |cff00FF7F" .. cooldownName .. " ready|r")
+                print("|cffFFFF00[Cooldowns]|r " .. characterName .. " |cff00FF7F" .. cooldownName .. " ready|r")
             else
                 local timeLeft = SecondsToClock(cooldownState.readyAt - currentTime)
-                print("|cffFFFF00[Cooldowns]|r <" .. characterName .. "> |cffFF4500" .. cooldownName .. " on cooldown|r " .. "|cffff6060" .. timeLeft .. "|r")
+                print("|cffFFFF00[Cooldowns]|r " .. characterName .. " |cffFF4500" .. cooldownName .. " on cooldown|r " .. "|cffff6060" .. timeLeft .. "|r")
             end
         end
     end
