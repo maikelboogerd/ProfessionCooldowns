@@ -8,4 +8,5 @@
 ## SavedVariables: ProfessionCooldownsDB
 ## DefaultState: enabled
 
+Util.lua
 ProfessionCooldowns.lua

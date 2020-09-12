@@ -6,25 +6,8 @@ local MOONCLOTH_SPELL_ID = 18560 -- 18563
 local SALT_SHAKER_ID = 15846
 local HEARTHSTONE_ID = 6948
 
-function SecondsToClock(seconds)
-
-    local seconds = tonumber(seconds)
-
-    if seconds <= 0 then
-        return "0h 0m"
-    else
-        h = string.format("%01.f", math.floor(seconds / 3600));
-        m = string.format("%01.f", math.floor(seconds / 60 - (h * 60)));
-        s = string.format("%02.f", math.floor(seconds - h * 3600 - m * 60));
-        return h .. "h " .. m .. "m"
-    end
-
-end
-
 function updateCooldowns()
-
     local playerName = UnitName("player")
-
     ProfessionCooldownsDB[playerName] = {}
 
     -- Hearthstone
@@ -37,7 +20,6 @@ function updateCooldowns()
 
     for i = 1, GetNumSkillLines() do
         local skillName, _, _, skillRank = GetSkillLineInfo(i)
-
         if skillName == "Alchemy" and skillRank >= 275 then
             -- Arcanite
             local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
@@ -54,7 +36,6 @@ function updateCooldowns()
                 readyAt = start + duration,
             }
         end
-
         if skillName == "Tailoring" and skillRank >= 250 then
             -- Mooncloth
             local start, duration, enabled = GetSpellCooldown(MOONCLOTH_SPELL_ID)
@@ -64,7 +45,6 @@ function updateCooldowns()
                 readyAt = start + duration,
             }
         end
-
         if skillName == "Leatherworking" and skillRank >= 250 then
             -- Salt Shaker
             local start, duration, enabled = GetItemCooldown(SALT_SHAKER_ID)
@@ -74,9 +54,7 @@ function updateCooldowns()
                 readyAt = start + duration,
             }
         end
-
     end
-
 end
 
 function printCooldowns()
@@ -102,8 +80,8 @@ function events:ADDON_LOADED(addonName)
 end
 
 function events:PLAYER_LOGIN(...)
-    updateCooldowns()
-    printCooldowns()
+    ProfessionCooldowns_wait(5, updateCooldowns)
+    ProfessionCooldowns_wait(5, printCooldowns)
 end
 
 function events:CHAT_MSG_LOOT(text, _, _, _, playerName2)
