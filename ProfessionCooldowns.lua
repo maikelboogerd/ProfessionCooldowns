@@ -1,9 +1,25 @@
 local frame, events = CreateFrame("FRAME"), {};
 
 local ARCANITE_SPELL_ID = 17187
+local WATER_TO_AIR = 17562
 local MOONCLOTH_SPELL_ID = 18560 -- 18563
 local SALT_SHAKER_ID = 15846
 local HEARTHSTONE_ID = 6948
+
+function SecondsToClock(seconds)
+
+    local seconds = tonumber(seconds)
+
+    if seconds <= 0 then
+        return "0h 0m"
+    else
+        h = string.format("%01.f", math.floor(seconds / 3600));
+        m = string.format("%01.f", math.floor(seconds / 60 - (h * 60)));
+        s = string.format("%02.f", math.floor(seconds - h * 3600 - m * 60));
+        return h .. "h " .. m .. "m"
+    end
+
+end
 
 function updateCooldowns()
 
@@ -11,13 +27,13 @@ function updateCooldowns()
 
     ProfessionCooldownsDB[playerName] = {}
 
-    -- -- Arcanite
-    -- local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
-    -- ProfessionCooldownsDB[playerName].Arcanite = {
-    --     cooldownStart = start,
-    --     cooldownDuration = duration,
-    --     readyAt = start + duration,
-    -- }
+    -- Hearthstone
+    local start, duration, enabled = GetItemCooldown(HEARTHSTONE_ID)
+    ProfessionCooldownsDB[playerName].Hearthstone = {
+        cooldownStart = start,
+        cooldownDuration = duration,
+        readyAt = start + duration,
+    }
 
     for i = 1, GetNumSkillLines() do
         local skillName, _, _, skillRank = GetSkillLineInfo(i)
@@ -26,6 +42,13 @@ function updateCooldowns()
             -- Arcanite
             local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
             ProfessionCooldownsDB[playerName].Arcanite = {
+                cooldownStart = start,
+                cooldownDuration = duration,
+                readyAt = start + duration,
+            }
+            -- Water to Air
+            local start, duration, enabled = GetSpellCooldown(WATER_TO_AIR)
+            ProfessionCooldownsDB[playerName].WaterToAir = {
                 cooldownStart = start,
                 cooldownDuration = duration,
                 readyAt = start + duration,
@@ -58,14 +81,13 @@ end
 
 function printCooldowns()
     local currentTime = GetTime()
-    print("ProfessionCooldowns:")
     for characterName, CooldownInfo in pairs(ProfessionCooldownsDB) do
-        print(characterName)
         for cooldownName, cooldownState in pairs(CooldownInfo) do
             if currentTime > cooldownState.readyAt then
-                print("|cff00FF00 + " .. characterName .. " " .. cooldownName .. " is ready|r")
+                print("|cffFFFF00[Cooldowns]|r <" .. characterName .. "> |cff00FF7F" .. cooldownName .. " ready|r")
             else
-                print("|cffFF0000 - " .. characterName .. " " .. cooldownName .. " on cooldown|r")
+                local timeLeft = SecondsToClock(cooldownState.readyAt - currentTime)
+                print("|cffFFFF00[Cooldowns]|r <" .. characterName .. "> |cffFF4500" .. cooldownName .. " on cooldown|r " .. "|cffff6060" .. timeLeft .. "|r")
             end
         end
     end
@@ -84,6 +106,13 @@ function events:PLAYER_LOGIN(...)
     printCooldowns()
 end
 
+function events:CHAT_MSG_LOOT(text, _, _, _, playerName2)
+    local playerName = UnitName("player")
+    if playerName == playerName2 then
+        updateCooldowns()
+    end
+end
+
 frame:SetScript("OnEvent", function(self, event, ...)
     events[event](self, ...)
 end);
@@ -94,6 +123,11 @@ end
 
 SLASH_COOLDOWNS1 = "/cd"
 function SlashCmdList.COOLDOWNS(msg, editbox)
-    updateCooldowns()
-    printCooldowns()
+    if msg == "reset" then
+        ProfessionCooldownsDB = {}
+        updateCooldowns()
+    else
+        updateCooldowns()
+        printCooldowns()
+    end
 end
