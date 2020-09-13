@@ -1,64 +1,34 @@
 local frame, events = CreateFrame("FRAME"), {};
 
-local ARCANITE_SPELL_ID = 17187
-local WATER_TO_AIR_ID = 17562
-local MOONCLOTH_SPELL_ID = 18560 -- 18563
-local SALT_SHAKER_ID = 15846
-local HEARTHSTONE_ID = 6948
-
-function updateCooldowns()
-    local playerName = UnitName("player")
-    ProfessionCooldownsDB[playerName] = {}
-
-    -- Hearthstone
-    local start, duration, enabled = GetItemCooldown(HEARTHSTONE_ID)
-    ProfessionCooldownsDB[playerName].Hearthstone = {
-        cooldownStart = start,
-        cooldownDuration = duration,
-        readyAt = start + duration,
-    }
-
-    for i = 1, GetNumSkillLines() do
-        local skillName, _, _, skillRank = GetSkillLineInfo(i)
-        if skillName == "Alchemy" and skillRank >= 275 then
-            -- Arcanite
-            local start, duration, enabled = GetSpellCooldown(ARCANITE_SPELL_ID)
-            ProfessionCooldownsDB[playerName].Arcanite = {
-                cooldownStart = start,
-                cooldownDuration = duration,
-                readyAt = start + duration,
-            }
-            -- Water to Air
-            local start, duration, enabled = GetSpellCooldown(WATER_TO_AIR_ID)
-            ProfessionCooldownsDB[playerName].WaterToAir = {
-                cooldownStart = start,
-                cooldownDuration = duration,
-                readyAt = start + duration,
-            }
-        end
-        if skillName == "Tailoring" and skillRank >= 250 then
-            -- Mooncloth
-            local start, duration, enabled = GetSpellCooldown(MOONCLOTH_SPELL_ID)
-            ProfessionCooldownsDB[playerName].Mooncloth = {
-                cooldownStart = start,
-                cooldownDuration = duration,
-                readyAt = start + duration,
-            }
-        end
-        if skillName == "Leatherworking" and skillRank >= 250 then
-            -- Salt Shaker
-            local start, duration, enabled = GetItemCooldown(SALT_SHAKER_ID)
-            ProfessionCooldownsDB[playerName].SaltShaker = {
-                cooldownStart = start,
-                cooldownDuration = duration,
-                readyAt = start + duration,
-            }
-        end
-    end
-end
+local cooldownSpells = {
+	{
+        spellName = "Transmute: Arcanite",
+        spellID = 17187,
+    },
+    {
+        spellName = "Transmute: Water to Air",
+        spellID = 17562,
+    },
+    {
+        spellName = "Transmute: Mooncloth",
+        spellID = 18560,
+    },
+    {
+        spellName = "Salt Shaker",
+        spellID = 19566,
+    },
+    -- {
+    --     spellName = "Hearthstone",
+    --     spellID = 8690,
+    -- },
+    -- {
+    --     spellName = "Blink",
+    --     spellID = 1953,
+	-- },
+}
 
 function printCooldowns()
-    local currentTime = GetTime()
+    local currentTime = GetServerTime()
     for characterName, CooldownInfo in pairs(ProfessionCooldownsDB) do
         for cooldownName, cooldownState in pairs(CooldownInfo) do
             if currentTime > cooldownState.readyAt then
@@ -80,14 +50,21 @@ function events:ADDON_LOADED(addonName)
 end
 
 function events:PLAYER_LOGIN(...)
-    ProfessionCooldowns_wait(5, updateCooldowns)
     ProfessionCooldowns_wait(5, printCooldowns)
 end
 
-function events:CHAT_MSG_LOOT(text, _, _, _, playerName2)
+function events:UNIT_SPELLCAST_SUCCEEDED(unitTarget, castGUID, spellID)
     local playerName = UnitName("player")
-    if playerName == playerName2 then
-        updateCooldowns()
+    local spellCooldown = GetSpellBaseCooldown(spellID) / 1000 -- seconds
+    for i, spellInfo in ipairs(cooldownSpells) do
+        if spellID == spellInfo.spellID then
+            local startCooldown = GetServerTime()
+            ProfessionCooldownsDB[playerName][spellInfo.spellName] = {
+                cooldownStart = startCooldown,
+                cooldownDuration = spellCooldown,
+                readyAt = startCooldown + spellCooldown,
+            }
+        end
     end
 end
 
@@ -102,10 +79,10 @@ end
 SLASH_COOLDOWNS1 = "/cd"
 function SlashCmdList.COOLDOWNS(msg, editbox)
     if msg == "reset" then
+        local playerName = UnitName("player")
         ProfessionCooldownsDB = {}
-        updateCooldowns()
+        ProfessionCooldownsDB[playerName] = {}
     else
-        updateCooldowns()
         printCooldowns()
     end
 end
