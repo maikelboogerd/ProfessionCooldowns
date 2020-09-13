@@ -1,7 +1,7 @@
 ## Interface: 11305
 
 ## Title: ProfessionCooldowns
-## Notes: Track Arcanite, Mooncloth and Salt Shaker cooldowns
+## Notes: Track Alchemy, Tailoring and Leatherworking cooldowns
 
 ## Version: 0.0.3
 ## Author: Maik
