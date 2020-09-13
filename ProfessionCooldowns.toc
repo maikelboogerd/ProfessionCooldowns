@@ -3,7 +3,7 @@
 ## Title: ProfessionCooldowns
 ## Notes: Track Arcanite, Mooncloth and Salt Shaker cooldowns
 
-## Version: 0.0.2
+## Version: 0.0.3
 ## Author: Maik
 ## SavedVariables: ProfessionCooldownsDB
 ## DefaultState: enabled
