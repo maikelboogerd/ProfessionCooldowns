@@ -35,6 +35,19 @@ local cooldownSpells = {
         spellName = "Spellcloth",
         spellID = 31373,
     },
+    -- Classic: Wrath of the Lich King
+    {
+        spellName = "Moonshroud",
+        spellID = 56001,
+    },
+    {
+        spellName = "Ebonweave",
+        spellID = 56002,
+    },
+    {
+        spellName = "Spellweave",
+        spellID = 56003,
+    },
 }
 
 function printCooldowns()
