@@ -1,9 +1,9 @@
-## Interface: 11305
+## Interface: 30400
 
 ## Title: ProfessionCooldowns
-## Notes: Track Alchemy, Tailoring and Leatherworking cooldowns
+## Notes: Track Profession Cooldowns for Classic Era, The Burning Crusade and Wrath of the Lich King
 
-## Version: 0.0.3
+## Version: 1.0.0
 ## Author: Maik
 ## SavedVariables: ProfessionCooldownsDB
 ## DefaultState: enabled
