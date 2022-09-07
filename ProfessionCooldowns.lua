@@ -18,6 +18,23 @@ local cooldownSpells = {
         spellName = "Salt Shaker",
         spellID = 19566,
     },
+    -- Classic: The Burning Crusade
+    {
+        spellName = "Transmute: Primal Might",
+        spellID = 29688,
+    },
+    {
+        spellName = "Primal Mooncloth",
+        spellID = 26751,
+    },
+    {
+        spellName = "Shadowcloth",
+        spellID = 36686,
+    },
+    {
+        spellName = "Spellcloth",
+        spellID = 31373,
+    },
 }
 
 function printCooldowns()
