@@ -1,4 +1,4 @@
-## Interface: 30400
+## Interface: 11505, 40401
 
 ## Title: ProfessionCooldowns
 ## Notes: Track Profession Cooldowns for Classic Era, The Burning Crusade and Wrath of the Lich King
