@@ -11,6 +11,10 @@ local cooldownSpells = {
         spellID = 17562,
     },
     {
+        spellName = "Transmute: Life to Earth",
+        spellID = 17565,
+    },
+    {
         spellName = "Transmute: Mooncloth",
         spellID = 18560,
     },
